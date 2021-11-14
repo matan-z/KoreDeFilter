@@ -6,7 +6,7 @@ Public buf As String, adrs As String
 Public isTable As Boolean
 Public tableName As String
 
-Sub KoreDeFilterTest()
+Sub KoreDeFilter_()
     f_FilterTool.Show vbModeless
 End Sub
 
@@ -56,37 +56,6 @@ Sub CopyTextToClipboard(ByVal inText As String)
     Set objClipboard = Nothing
 End Sub
 
-Sub テキストボックスでカンマ区切り(ByVal text As String)
-    Dim CB As Variant
-    Dim クリップ() As String
-    クリップ = 改行で格納(text)
-    Dim クリップ配列() As String, i As Long
-    ReDim クリップ配列(UBound(クリップ))
-    For i = 0 To UBound(クリップ)
-        If クリップ(i) <> "" Then
-            クリップ配列(i) = Replace(クリップ(i), vbCr, "")
-        End If
-    Next i
-    '【参考URL】https://oshiete.goo.ne.jp/qa/6871211.html
-    Dim c As Variant
-    Dim 個数 As Long
-    Dim 配列 As Variant
-    Set DB = CreateObject("Scripting.Dictionary")
-    For Each c In クリップ配列
-        DB(c) = 1
-    Next c
-    個数 = DB.Count '参考、新配列の個数
-    配列 = DB.Keys '新配列の展開
-    buf = ""
-    For i = 0 To UBound(配列)
-        buf = buf + 配列(i) & ","
-    Next i
-    If Len(buf) > 0 Then
-        buf = Left(buf, Len(buf) - 1)
-    End If
-    CopyTextToClipboard (buf)
-    MsgBox buf & vbLf & "をクリップボードに置きました"
-End Sub
 Sub 空白削除(ByVal text As String)
     Dim CB As Variant
     Dim クリップ() As String
@@ -101,6 +70,7 @@ Sub 空白削除(ByVal text As String)
     Dim c As Variant
     Dim 個数 As Long
     Dim 配列 As Variant
+    Dim DB As Object
     Set DB = CreateObject("Scripting.Dictionary")
     For Each c In クリップ配列
         DB(c) = 1

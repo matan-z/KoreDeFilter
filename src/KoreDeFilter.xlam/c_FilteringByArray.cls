@@ -128,10 +128,10 @@ Function Filter(targetWb As Workbook, arr As Variant)
                 If Obj Is Nothing Then
                     buf = buf & arr(i) & vbCrLf
                     notFound = notFound & arr(i) & vbCrLf
-                    both = both & i + 1 & " " & "Å~" & " " & arr(i) & vbCrLf
+                    both = both & i + 1 & vbTab & "Å~" & vbTab & arr(i) & vbCrLf
                 Else
                     found = found & arr(i) & vbCrLf
-                    both = both & i + 1 & " " & "ÅZ" & " " & arr(i) & vbCrLf
+                    both = both & i + 1 & vbTab & "ÅZ" & vbTab & arr(i) & vbCrLf
                     j = j + 1
                 End If
             Next i
@@ -154,6 +154,9 @@ Function Filter(targetWb As Workbook, arr As Variant)
             If notFound = "" Then
                 WSH.Popup j & "å¬ÅAÇ∫ÇÒÇ’Ç†ÇËÇ‹ÇµÇΩ", 1, "Title", vbInformation
                 Set WSH = Nothing
+'            ElseIf found = "" Then
+'                WSH.Popup j & "å¬ÅAÇ–Ç∆Ç¬Ç‡Ç†ÇËÇ‹ÇπÇÒ", 1, "Title", vbInformation
+'                Set WSH = Nothing
             Else
                 msgStr = "Ç»Ç¢" & vbCrLf & notFound & vbCrLf & _
                 "=====================" & vbCrLf & _
