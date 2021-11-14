@@ -18,7 +18,7 @@ Option Explicit
 Private Sub CommandButton1_Click()
 Call m_FilteringByArray.CopyTextToClipboard(f_Result.TextBox1.Value)
 End Sub
-Private Sub CommandButton2_Click()
+Private Sub cbn_DeleteDuplicateAndBlank_Click()
     Dim Path As String, WSH As Variant
     Set WSH = CreateObject("WScript.Shell")
     Path = WSH.SpecialFolders("Desktop") & "\"
