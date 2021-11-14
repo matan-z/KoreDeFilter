@@ -139,20 +139,39 @@ Function Filter(targetWb As Workbook, arr As Variant)
                 buf = Mid(buf, 1, Len(buf) - 1)
             End If
             If buf = "" Then
-                Dim WSH As Object
-                Set WSH = CreateObject("WScript.Shell")
+'                Dim WSH As Object
+'                Set WSH = CreateObject("WScript.Shell")
+'                WSH.Popup j & "個、ぜんぷありました", 1, "Title", vbInformation
+'                Set WSH = Nothing
+            Else
+                ' MsgBox buf & vbLf & "はありませんでした", vbApplicationModal
+'                msg = InputBox(Prompt:="", Default:=j & "個ありましたが、" & buf & " はありませんでした")
+            End If
+            
+            Dim msgStr As String
+            Dim WSH As Object
+            Set WSH = CreateObject("WScript.Shell")
+            If notFound = "" Then
                 WSH.Popup j & "個、ぜんぷありました", 1, "Title", vbInformation
                 Set WSH = Nothing
             Else
-                ' MsgBox buf & vbLf & "はありませんでした", vbApplicationModal
-                msg = InputBox(Prompt:="", Default:=j & "個ありましたが、" & buf & " はありませんでした")
+                msgStr = "ない" & vbCrLf & notFound & vbCrLf & _
+                "=====================" & vbCrLf & _
+                "ある" & vbCrLf & found & vbCrLf & _
+                "=====================" & _
+                all & vbCrLf & both
+                
+                Dim myDo  As New DataObject
+                Set myDo = New DataObject
+                myDo.SetText msgStr
+                myDo.PutInClipboard
+                
+                Dim ret As Long
+                ret = Shell("Notepad.Exe", vbNormalFocus)
+                AppActivate ("無題 - メモ帳")
+                CreateObject("Wscript.Shell").SendKeys "^v"
+
             End If
-            f_Result.Show vbModeless
-            f_Result.TextBox1 = "ない" & vbCrLf & notFound & vbCrLf & _
-            "=====================" & vbCrLf & _
-            "ある" & vbCrLf & found & vbCrLf & _
-            "=====================" & _
-            all & vbCrLf & both
             ' WorksheetFunction.Subtotal(3, Columns(selectedCol ))
         End If
     End With
