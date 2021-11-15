@@ -59,7 +59,7 @@ Private Sub TextBox1_Change()
 End Sub
 
 Private Sub UserForm_Initialize()
-    Me.Label1.Caption = ThisWorkbook.Name
+    Me.lbl_ThisName.Caption = ThisWorkbook.Name
     Me.Height = 404.25
     Me.Width = 163.5
     With TextBox1
