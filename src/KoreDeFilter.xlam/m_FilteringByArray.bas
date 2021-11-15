@@ -1,7 +1,7 @@
 Attribute VB_Name = "m_FilteringByArray"
 Option Explicit
 
-Public i As Long, j As Long, Col As Long, 最終行 As Long, selectedCol As Long, AFS As Long, AFE As Long
+Public i As Long, j As Long, Col As Long, selectedCol As Long, AFS As Long, AFE As Long
 Public buf As String, adrs As String
 Public isTable As Boolean
 Public tableName As String
@@ -47,101 +47,36 @@ Sub KoreDeFilter(ByVal text As String)
     End If
 End Sub
 
-'【参考URL】https://desmondoshiwambo.wordpress.com/2012/02/23/how-to-copy-and-paste-texttofrom-clipboard-using-vba-microsoft-access/
-Sub CopyTextToClipboard(ByVal inText As String)
-    Dim objClipboard As Object
-    Set objClipboard = CreateObject("new:{1C3B4210-F441-11CE-B9EA-00AA006B1A69}")
-    objClipboard.SetText inText
-    objClipboard.PutInClipboard
-    Set objClipboard = Nothing
-End Sub
-
-Sub 空白削除(ByVal text As String)
-    Dim CB As Variant
-    Dim クリップ() As String
-    クリップ = 改行で格納(text)
-    Dim クリップ配列() As String, i As Long
-    ReDim クリップ配列(UBound(クリップ))
-    For i = 0 To UBound(クリップ)
-        クリップ配列(i) = Replace(クリップ(i), vbCr, "")
-    Next i
-    '重複削除
-    '【参考URL】https://oshiete.goo.ne.jp/qa/6871211.html
-    Dim c As Variant
-    Dim 個数 As Long
-    Dim 配列 As Variant
-    Dim DB As Object
-    Set DB = CreateObject("Scripting.Dictionary")
-    For Each c In クリップ配列
-        DB(c) = 1
-    Next c
-    個数 = DB.Count
-    配列 = DB.Keys
-    i = 0
-    j = 0
-    buf = ""
-    For i = 0 To UBound(配列)
-        If 配列(i) <> "" And i <> UBound(配列) Then
-            buf = buf & 配列(i) & vbLf
-            j = j + 1
-        Else
-            If 配列(i) <> "" And i = UBound(配列) Then
-                buf = buf & 配列(i)
-                j = j + 1
-            End If
-        End If
-    Next
-    f_FilterTool.TextBox1.Value = ""
-    f_FilterTool.TextBox1.Value = buf
-End Sub
-
-Function 改行で格納(str As String) As String()
-    改行で格納 = Split(TrimLF(str), vbLf)
-End Function
-Sub 複数セル選択の場合()
-    Dim ad, buf As String
-    ad = Selection.Address
-    Dim adArray() As String
-    adArray = Split(ad, ",")
-    Dim 配列 As Variant
-    ReDim 配列(UBound(adArray))
-    buf = ""
-    For i = 0 To UBound(adArray)
-        配列(i) = Range(adArray(i)).Value
-        If i <> UBound(adArray) Then
-            buf = buf + Range(adArray(i)).Value '+ ","
-        Else
-            buf = buf + Range(adArray(i)).Value
-        End If
-    Next i
-    With New MSForms.DataObject
-        .SetText buf '変数の値をDataObjectに格納する
-        .PutInClipboard 'DataObjectのデータをクリップボードに格納する
-    End With
-End Sub
-'【参考URL】https://desmondoshiwambo.wordpress.com/2012/02/23/how-to-copy-and-paste-texttofrom-clipboard-using-vba-microsoft-access/
-
-'(does not require reference) :
-Function GetTextFromClipboard() As String
-    Dim objClipboard As Object
-    Set objClipboard = CreateObject("new:{1C3B4210-F441-11CE-B9EA-00AA006B1A69}")
-    objClipboard.GetFromClipboard
-    On Error GoTo myError
-    GetTextFromClipboard = objClipboard.GetText
-    '******************************エラー処理
-myError:
-    If Err.Number <> 0 Then '2017/06/11に追記 エラーゼロで予期せぬエラーとなるため
-        Select Case Err.Number
-            Case -2147221404
-                MsgBox "クリップボードが空です" & vbCrLf & Err.Description, vbExclamation
-                'クリップボードでフィルタ.Show vbModeless
-            End
-            Case Else
-                On Error Resume Next
-                'クリップボードでフィルタ.Show vbModeless
-                MsgBox "予期せぬエラーが発生しました!", vbExclamation
-        End Select
-    End If
-    '******************************
-    Set objClipboard = Nothing
-End Function
+''【参考URL】https://desmondoshiwambo.wordpress.com/2012/02/23/how-to-copy-and-paste-texttofrom-clipboard-using-vba-microsoft-access/
+'Sub CopyTextToClipboard(ByVal inText As String)
+'    Dim objClipboard As Object
+'    Set objClipboard = CreateObject("new:{1C3B4210-F441-11CE-B9EA-00AA006B1A69}")
+'    objClipboard.SetText inText
+'    objClipboard.PutInClipboard
+'    Set objClipboard = Nothing
+'End Sub
+'
+''(does not require reference) :
+'Function GetTextFromClipboard() As String
+'    Dim objClipboard As Object
+'    Set objClipboard = CreateObject("new:{1C3B4210-F441-11CE-B9EA-00AA006B1A69}")
+'    objClipboard.GetFromClipboard
+'    On Error GoTo myError
+'    GetTextFromClipboard = objClipboard.GetText
+'    '******************************エラー処理
+'myError:
+'    If Err.Number <> 0 Then '2017/06/11に追記 エラーゼロで予期せぬエラーとなるため
+'        Select Case Err.Number
+'            Case -2147221404
+'                MsgBox "クリップボードが空です" & vbCrLf & Err.Description, vbExclamation
+'                'クリップボードでフィルタ.Show vbModeless
+'            End
+'            Case Else
+'                On Error Resume Next
+'                'クリップボードでフィルタ.Show vbModeless
+'                MsgBox "予期せぬエラーが発生しました!", vbExclamation
+'        End Select
+'    End If
+'    '******************************
+'    Set objClipboard = Nothing
+'End Function
