@@ -108,6 +108,10 @@ $all = @(
         @{ In = "1981/5/7`n2000/1/1";                         Expect = 'missing:2000/1/1'; Visible = '1981/5/7' }) }
     @{ Name = 'partial';          R = 1; C = 1; Table = $true;  Data = @('品名', 'ABC', 'XYZ', 'ABC', 'XYZ'); Tests = @(
         @{ In = "AB`nXYZ"; Expect = 'missing:AB'; Visible = 'XYZ,XYZ' }) }
+    # 問題 4: 各行の前後の空白（半角・全角）
+    @{ Name = 'trim';             R = 1; C = 1; Table = $true;  Data = @('品名', 'ABC', 'XYZ', 'ABC', 'DEF'); Tests = @(
+        @{ In = "ABC `n  XYZ";      Expect = 'all'; Visible = 'ABC,XYZ,ABC' }
+        @{ In = "ABC　`n　XYZ";     Expect = 'all'; Visible = 'ABC,XYZ,ABC' }) }
 )
 if ($Cases) { $all = $all | Where-Object { $Cases -contains $_.Name } }
 

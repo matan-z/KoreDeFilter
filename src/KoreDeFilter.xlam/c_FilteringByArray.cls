@@ -47,12 +47,28 @@ End Function
 Function VbCrRemoveArr(arr() As String) As String()
     Dim textBoxArr() As String, i As Long
     ReDim textBoxArr(UBound(arr))
-    '各vbCrを削除
+    '各vbCrを削除し、前後の空白を取り除く
     For i = 0 To UBound(arr)
-        textBoxArr(i) = Trim(arr(i))
-        textBoxArr(i) = Replace(arr(i), vbCr, "")
+        textBoxArr(i) = TrimSpaces(Replace(arr(i), vbCr, ""))
     Next i
     VbCrRemoveArr = textBoxArr
+End Function
+
+'前後の半角スペース・全角スペース・タブを取り除く
+Function TrimSpaces(ByVal str As String) As String
+    Do While Len(str) > 0
+        Select Case Left(str, 1)
+            Case " ", "　", vbTab: str = Mid(str, 2)
+            Case Else: Exit Do
+        End Select
+    Loop
+    Do While Len(str) > 0
+        Select Case Right(str, 1)
+            Case " ", "　", vbTab: str = Left(str, Len(str) - 1)
+            Case Else: Exit Do
+        End Select
+    Loop
+    TrimSpaces = str
 End Function
 
 '7 '3-3
