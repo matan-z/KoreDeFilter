@@ -22,6 +22,14 @@
       "command": "powershell.exe",
       "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}\\tools\\vba-sync.ps1", "-Action", "Import", "-Save"],
       "problemMatcher": []
+    },
+    {
+      "label": "VBA: Test",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}\\tests\\run-tests.ps1"],
+      "problemMatcher": [],
+      "group": { "kind": "test", "isDefault": true }
     }
   ]
 }
