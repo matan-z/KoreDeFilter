@@ -87,6 +87,22 @@ Function DelDupe(arr() As String) As Variant
     DelDupe = delDupeArr
 End Function
 
+'フィルタ範囲のうち、表示されているデータ行の数（見出し行は除く）
+Private Function VisibleDataRows(afRng As Range) As Long
+    If afRng.Rows.Count <= 1 Then Exit Function
+    Dim body As Range
+    Set body = afRng.Columns(1).Offset(1, 0).Resize(afRng.Rows.Count - 1)
+    '1 セルに SpecialCells を使うとシート全体が対象になるため、別に判定する
+    If body.Cells.Count = 1 Then
+        If Not body.EntireRow.Hidden Then VisibleDataRows = 1
+        Exit Function
+    End If
+    '表示されているセルがないと SpecialCells はエラーになる（その場合は 0 のまま）
+    On Error Resume Next
+    VisibleDataRows = body.SpecialCells(xlCellTypeVisible).Count
+    On Error GoTo 0
+End Function
+
 '8
 Function Filter(targetWb As Workbook, arr As Variant)
     Dim msg As String
@@ -110,7 +126,7 @@ Function Filter(targetWb As Workbook, arr As Variant)
             Criteria1:=Array(arr), _
             Operator:=xlFilterValues
 
-        If WorksheetFunction.Subtotal(3, .Columns(selectedCol)) = 1 Then  'フィルター対象の列にデータがひとつしかなかったら
+        If VisibleDataRows(afRng) = 0 Then  'フィルタの結果、表示されるデータ行がなかったら
             MsgBox "該当データがないのでフィルターを戻します"
             ' ActiveSheet.Columuns(selectedCol ).ShowAllData
             '列のみフィルター 【参考】https://matome.naver.jp/odai/2143208158655847001
