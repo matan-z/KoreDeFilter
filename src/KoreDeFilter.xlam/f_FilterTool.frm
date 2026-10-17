@@ -1,4 +1,4 @@
-VERSION 5.00
+ï»¿VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} f_FilterTool 
    Caption         =   "FilteringTool"
    ClientHeight    =   7500
@@ -6,7 +6,7 @@ Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} f_FilterTool
    ClientTop       =   465
    ClientWidth     =   3030
    OleObjectBlob   =   "f_FilterTool.frx":0000
-   StartUpPosition =   1  'ƒI[ƒi[ ƒtƒH[ƒ€‚Ì’†‰›
+   StartUpPosition =   1  'ã‚ªãƒ¼ãƒŠãƒ¼ ãƒ•ã‚©ãƒ¼ãƒ ã®ä¸­å¤®
 End
 Attribute VB_Name = "f_FilterTool"
 Attribute VB_GlobalNameSpace = False
@@ -44,11 +44,11 @@ Private Sub cbn_FilterByTextBox_Click()
     m_FilteringByArray.KoreDeFilter TextBox1.Value
 End Sub
 
-Private Sub CloseButton_Click() 'Closeƒ{ƒ^ƒ“
+Private Sub CloseButton_Click() 'Closeãƒœã‚¿ãƒ³
     Unload Me
 End Sub
 
-Private Sub cbn_RemoveFilter_Click() 'ƒtƒBƒ‹ƒ^‰ğœ
+Private Sub cbn_RemoveFilter_Click() 'ãƒ•ã‚£ãƒ«ã‚¿è§£é™¤
     On Error Resume Next
     ActiveSheet.ShowAllData
     On Error GoTo 0

@@ -1,7 +1,6 @@
 {
-  "[vb]": {
-    "files.encoding": "shiftjis"
-  },
+  // VBA ソース (.bas/.cls/.frm) は UTF-8 (BOM 付き)、.vbs は Shift-JIS のため自動判定にする
+  "files.autoGuessEncoding": true,
   "files.associations": {
     "*.cls": "vb",
     "*.bas": "vb",

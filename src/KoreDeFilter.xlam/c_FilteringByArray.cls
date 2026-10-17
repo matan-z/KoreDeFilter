@@ -1,4 +1,4 @@
-VERSION 1.0 CLASS
+ï»¿VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
@@ -12,9 +12,9 @@ Option Explicit
 '3 '2-1
 Function FilteringByRange(myRng As Range, text As String)
     AFS = myRng.Column '
-    AFE = myRng.Columns.Count '—ñ‚ª‰½—ñ‚ ‚é‚©
+    AFE = myRng.Columns.Count 'åˆ—ãŒä½•åˆ—ã‚ã‚‹ã‹
 
-    Col = ActiveCell.Column 'Œ»İ‚Ì‘I‘ğƒZƒ‹‚Ì—ñ
+    Col = ActiveCell.Column 'ç¾åœ¨ã®é¸æŠã‚»ãƒ«ã®åˆ—
     Dim arr() As String
     text = Trim(text)
     Dim c1 As c_FilteringByArray: Set c1 = New c_FilteringByArray
@@ -29,7 +29,7 @@ End Function
 Function ArrByLf(str As String) As String()
     ArrByLf = Split(Me.TrimArr(str), vbLf) '4-1
 End Function
-'http://www.relief.jp/docs/013815.html ¥•¶š—ñ‚Ì‘O‚ÆŒã‚ëEƒZƒ‹‚Ìæ“ª‚Æ––”ö‚Ì‰üs‚ğíœ‚·‚é
+'http://www.relief.jp/docs/013815.html â–¼æ–‡å­—åˆ—ã®å‰ã¨å¾Œã‚ãƒ»ã‚»ãƒ«ã®å…ˆé ­ã¨æœ«å°¾ã®æ”¹è¡Œã‚’å‰Šé™¤ã™ã‚‹
 '5 '4-1
 Function TrimArr(str As String) As String
     Dim strTmp As String
@@ -47,7 +47,7 @@ End Function
 Function VbCrRemoveArr(arr() As String) As String()
     Dim textBoxArr() As String, i As Long
     ReDim textBoxArr(UBound(arr))
-    'ŠevbCr‚ğíœ
+    'å„vbCrã‚’å‰Šé™¤
     For i = 0 To UBound(arr)
         textBoxArr(i) = Trim(arr(i))
         textBoxArr(i) = Replace(arr(i), vbCr, "")
@@ -65,8 +65,8 @@ Function DelDupe(arr() As String) As Variant
     For Each c In arr
         dic(c) = 0
     Next c
-    cnt = dic.Count 'QlAV”z—ñ‚ÌŒÂ”
-    delDupeArr = dic.Keys 'V”z—ñ‚Ì“WŠJ
+    cnt = dic.Count 'å‚è€ƒã€æ–°é…åˆ—ã®å€‹æ•°
+    delDupeArr = dic.Keys 'æ–°é…åˆ—ã®å±•é–‹
     i = 0
     j = 0
     Dim buf As String
@@ -109,10 +109,10 @@ Function Filter(targetWb As Workbook, arr As Variant)
             Operator:=xlFilterValues
         End If
         
-        If WorksheetFunction.Subtotal(3, .Columns(selectedCol)) = 1 Then  'ƒtƒBƒ‹ƒ^[‘ÎÛ‚Ì—ñ‚Éƒf[ƒ^‚ª‚Ğ‚Æ‚Â‚µ‚©‚È‚©‚Á‚½‚ç
-            MsgBox "ŠY“–ƒf[ƒ^‚ª‚È‚¢‚Ì‚ÅƒtƒBƒ‹ƒ^[‚ğ–ß‚µ‚Ü‚·"
+        If WorksheetFunction.Subtotal(3, .Columns(selectedCol)) = 1 Then  'ãƒ•ã‚£ãƒ«ã‚¿ãƒ¼å¯¾è±¡ã®åˆ—ã«ãƒ‡ãƒ¼ã‚¿ãŒã²ã¨ã¤ã—ã‹ãªã‹ã£ãŸã‚‰
+            MsgBox "è©²å½“ãƒ‡ãƒ¼ã‚¿ãŒãªã„ã®ã§ãƒ•ã‚£ãƒ«ã‚¿ãƒ¼ã‚’æˆ»ã—ã¾ã™"
             ' ActiveSheet.Columuns(selectedCol ).ShowAllData
-            '—ñ‚Ì‚İƒtƒBƒ‹ƒ^[ yQlzhttps://matome.naver.jp/odai/2143208158655847001
+            'åˆ—ã®ã¿ãƒ•ã‚£ãƒ«ã‚¿ãƒ¼ ã€å‚è€ƒã€‘https://matome.naver.jp/odai/2143208158655847001
             .Cells(ActiveSheet.AutoFilter.Range.Row, ActiveSheet.AutoFilter.Range.Column).AutoFilter Field:=selectedCol
         Else
             i = 0
@@ -128,10 +128,10 @@ Function Filter(targetWb As Workbook, arr As Variant)
                 If Obj Is Nothing Then
                     buf = buf & arr(i) & vbCrLf
                     notFound = notFound & arr(i) & vbCrLf
-                    both = both & i + 1 & vbTab & "~" & vbTab & arr(i) & vbCrLf
+                    both = both & i + 1 & vbTab & "Ã—" & vbTab & arr(i) & vbCrLf
                 Else
                     found = found & arr(i) & vbCrLf
-                    both = both & i + 1 & vbTab & "Z" & vbTab & arr(i) & vbCrLf
+                    both = both & i + 1 & vbTab & "ã€‡" & vbTab & arr(i) & vbCrLf
                     j = j + 1
                 End If
             Next i
@@ -141,26 +141,26 @@ Function Filter(targetWb As Workbook, arr As Variant)
             If buf = "" Then
 '                Dim WSH As Object
 '                Set WSH = CreateObject("WScript.Shell")
-'                WSH.Popup j & "ŒÂA‚º‚ñ‚Õ‚ ‚è‚Ü‚µ‚½", 1, "Title", vbInformation
+'                WSH.Popup j & "å€‹ã€ãœã‚“ã·ã‚ã‚Šã¾ã—ãŸ", 1, "Title", vbInformation
 '                Set WSH = Nothing
             Else
-                ' MsgBox buf & vbLf & "‚Í‚ ‚è‚Ü‚¹‚ñ‚Å‚µ‚½", vbApplicationModal
-'                msg = InputBox(Prompt:="", Default:=j & "ŒÂ‚ ‚è‚Ü‚µ‚½‚ªA" & buf & " ‚Í‚ ‚è‚Ü‚¹‚ñ‚Å‚µ‚½")
+                ' MsgBox buf & vbLf & "ã¯ã‚ã‚Šã¾ã›ã‚“ã§ã—ãŸ", vbApplicationModal
+'                msg = InputBox(Prompt:="", Default:=j & "å€‹ã‚ã‚Šã¾ã—ãŸãŒã€" & buf & " ã¯ã‚ã‚Šã¾ã›ã‚“ã§ã—ãŸ")
             End If
             
             Dim msgStr As String
             Dim WSH As Object
             Set WSH = CreateObject("WScript.Shell")
             If notFound = "" Then
-                WSH.Popup j & "ŒÂA‚º‚ñ‚Õ‚ ‚è‚Ü‚µ‚½", 1, "Title", vbInformation
+                WSH.Popup j & "å€‹ã€ãœã‚“ã·ã‚ã‚Šã¾ã—ãŸ", 1, "Title", vbInformation
                 Set WSH = Nothing
 '            ElseIf found = "" Then
-'                WSH.Popup j & "ŒÂA‚Ğ‚Æ‚Â‚à‚ ‚è‚Ü‚¹‚ñ", 1, "Title", vbInformation
+'                WSH.Popup j & "å€‹ã€ã²ã¨ã¤ã‚‚ã‚ã‚Šã¾ã›ã‚“", 1, "Title", vbInformation
 '                Set WSH = Nothing
             Else
-                msgStr = "‚È‚¢" & vbCrLf & notFound & vbCrLf & _
+                msgStr = "ãªã„" & vbCrLf & notFound & vbCrLf & _
                 "=====================" & vbCrLf & _
-                "‚ ‚é" & vbCrLf & found & vbCrLf & _
+                "ã‚ã‚‹" & vbCrLf & found & vbCrLf & _
                 "=====================" & _
                 all & vbCrLf & both
                 
@@ -171,7 +171,7 @@ Function Filter(targetWb As Workbook, arr As Variant)
                 
                 Dim ret As Long
                 ret = Shell("Notepad.Exe", vbNormalFocus)
-                AppActivate ("–³‘è - ƒƒ‚’ ")
+                AppActivate ("ç„¡é¡Œ - ãƒ¡ãƒ¢å¸³")
                 CreateObject("Wscript.Shell").SendKeys "^v"
 
             End If

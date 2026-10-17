@@ -1,4 +1,4 @@
-Attribute VB_Name = "m_FilteringByArray"
+ï»¿Attribute VB_Name = "m_FilteringByArray"
 Option Explicit
 
 Public i As Long, j As Long, Col As Long, selectedCol As Long, AFS As Long, AFE As Long
@@ -30,7 +30,7 @@ Sub KoreDeFilter(ByVal text As String)
                 Set myRng = ws.AutoFilter.Range
                 Call c.FilteringByRange(myRng, f_FilterTool.TextBox1.Value) '2-1
             Else
-                MsgBox "ƒI[ƒgƒtƒBƒ‹ƒ^‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ"
+                MsgBox "ã‚ªãƒ¼ãƒˆãƒ•ã‚£ãƒ«ã‚¿ãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“"
             End If
         Else
             Dim tableName As String
@@ -39,15 +39,15 @@ Sub KoreDeFilter(ByVal text As String)
                 Set myRng = ws.ListObjects(tableName).AutoFilter.Range
                 Call c.FilteringByRange(myRng, f_FilterTool.TextBox1.Value)  '2-1
             Else
-                MsgBox "ƒI[ƒgƒtƒBƒ‹ƒ^‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ"
+                MsgBox "ã‚ªãƒ¼ãƒˆãƒ•ã‚£ãƒ«ã‚¿ãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“"
             End If
         End If
     Else
-        MsgBox "ƒeƒLƒXƒgƒ{ƒbƒNƒX‚É‰½‚à“ü‚Á‚Ä‚¢‚Ü‚¹‚ñ"
+        MsgBox "ãƒ†ã‚­ã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã«ä½•ã‚‚å…¥ã£ã¦ã„ã¾ã›ã‚“"
     End If
 End Sub
 
-''yQlURLzhttps://desmondoshiwambo.wordpress.com/2012/02/23/how-to-copy-and-paste-texttofrom-clipboard-using-vba-microsoft-access/
+''ã€å‚è€ƒURLã€‘https://desmondoshiwambo.wordpress.com/2012/02/23/how-to-copy-and-paste-texttofrom-clipboard-using-vba-microsoft-access/
 'Sub CopyTextToClipboard(ByVal inText As String)
 '    Dim objClipboard As Object
 '    Set objClipboard = CreateObject("new:{1C3B4210-F441-11CE-B9EA-00AA006B1A69}")
@@ -63,18 +63,18 @@ End Sub
 '    objClipboard.GetFromClipboard
 '    On Error GoTo myError
 '    GetTextFromClipboard = objClipboard.GetText
-'    '******************************ƒGƒ‰[ˆ—
+'    '******************************ã‚¨ãƒ©ãƒ¼å‡¦ç†
 'myError:
-'    If Err.Number <> 0 Then '2017/06/11‚É’Ç‹L ƒGƒ‰[ƒ[ƒ‚Å—\Šú‚¹‚ÊƒGƒ‰[‚Æ‚È‚é‚½‚ß
+'    If Err.Number <> 0 Then '2017/06/11ã«è¿½è¨˜ ã‚¨ãƒ©ãƒ¼ã‚¼ãƒ­ã§äºˆæœŸã›ã¬ã‚¨ãƒ©ãƒ¼ã¨ãªã‚‹ãŸã‚
 '        Select Case Err.Number
 '            Case -2147221404
-'                MsgBox "ƒNƒŠƒbƒvƒ{[ƒh‚ª‹ó‚Å‚·" & vbCrLf & Err.Description, vbExclamation
-'                'ƒNƒŠƒbƒvƒ{[ƒh‚ÅƒtƒBƒ‹ƒ^.Show vbModeless
+'                MsgBox "ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ãŒç©ºã§ã™" & vbCrLf & Err.Description, vbExclamation
+'                'ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã§ãƒ•ã‚£ãƒ«ã‚¿.Show vbModeless
 '            End
 '            Case Else
 '                On Error Resume Next
-'                'ƒNƒŠƒbƒvƒ{[ƒh‚ÅƒtƒBƒ‹ƒ^.Show vbModeless
-'                MsgBox "—\Šú‚¹‚ÊƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½!", vbExclamation
+'                'ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã§ãƒ•ã‚£ãƒ«ã‚¿.Show vbModeless
+'                MsgBox "äºˆæœŸã›ã¬ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸ!", vbExclamation
 '        End Select
 '    End If
 '    '******************************
