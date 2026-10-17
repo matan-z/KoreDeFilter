@@ -120,13 +120,24 @@ Function Filter(targetWb As Workbook, arr As Variant)
             j = 0
             buf = ""
             ' UserForm4.Show vbModeless
+            'フィルタ対象列の値を集める（非表示の行も含む）。
+            'フィルタと同じく、表示形式どおりの文字列で、大文字小文字を区別せず完全一致で判定する。
+            '（Find は日付を見つけられないことがあり、非表示の行も探さないため使わない）
+            Dim existing As Object
+            Set existing = CreateObject("Scripting.Dictionary")
+            existing.CompareMode = vbTextCompare
+            Dim cell As Range
+            If afRng.Rows.Count > 1 Then
+                For Each cell In afRng.Columns(selectedCol).Offset(1, 0).Resize(afRng.Rows.Count - 1).Cells
+                    existing(cell.Text) = True
+                    If Not IsError(cell.Value) Then existing(CStr(cell.Value)) = True
+                Next cell
+            End If
             For i = 0 To UBound(arr)
-                Dim Obj As Range
-                Set Obj = ws.Columns(Col).Find(What:=arr(i), LookIn:=xlValues, Lookat:=xlPart, SearchOrder:=xlByColumns)
                 Dim found As String
                 Dim notFound As String
                 Dim both As String
-                If Obj Is Nothing Then
+                If Not existing.Exists(CStr(arr(i))) Then
                     buf = buf & arr(i) & vbCrLf
                     notFound = notFound & arr(i) & vbCrLf
                     both = both & i + 1 & vbTab & "×" & vbTab & arr(i) & vbCrLf
