@@ -23,6 +23,11 @@ Function FilteringByRange(myRng As Range, text As String)
     arr2 = c1.VbCrRemoveArr(arr) '3-2
     Dim arr3 As Variant
     arr3 = Me.DelDupe(arr2)
+    '空白や改行しか入っていなければ、フィルタしない
+    If UBound(arr3) < 0 Then
+        MsgBox "テキストボックスに何も入っていません"
+        Exit Function
+    End If
     Call Me.Filter(ActiveWorkbook, arr3) '3-3
 End Function
 '4 '3-1
@@ -79,7 +84,8 @@ Function DelDupe(arr() As String) As Variant
     Dim dic As Object
     Set dic = CreateObject("Scripting.Dictionary")
     For Each c In arr
-        dic(c) = 0
+        '空の行は条件に入れない（入れると空白のセルも表示されてしまう）
+        If c <> "" Then dic(c) = 0
     Next c
     cnt = dic.Count '参考、新配列の個数
     delDupeArr = dic.Keys '新配列の展開

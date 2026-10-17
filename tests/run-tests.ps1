@@ -112,6 +112,12 @@ $all = @(
     @{ Name = 'trim';             R = 1; C = 1; Table = $true;  Data = @('品名', 'ABC', 'XYZ', 'ABC', 'DEF'); Tests = @(
         @{ In = "ABC `n  XYZ";      Expect = 'all'; Visible = 'ABC,XYZ,ABC' }
         @{ In = "ABC　`n　XYZ";     Expect = 'all'; Visible = 'ABC,XYZ,ABC' }) }
+    # 問題 6: 空の行（空白のセルが一緒に表示されないこと）
+    @{ Name = 'blank-line';       R = 1; C = 1; Table = $true;  Data = @('品名', 'りんご', '', 'みかん', 'ぶどう'); Tests = @(
+        @{ In = "りんご`n`nみかん";     Expect = 'all';   Visible = 'りんご,みかん' }
+        @{ In = "`n`nりんご`n`n";       Expect = 'all';   Visible = 'りんご' }
+        @{ In = "りんご`n `nみかん";    Expect = 'all';   Visible = 'りんご,みかん' }
+        @{ In = "`n `n";                Expect = 'empty'; Visible = 'りんご,,みかん,ぶどう' }) }
 )
 if ($Cases) { $all = $all | Where-Object { $Cases -contains $_.Name } }
 
