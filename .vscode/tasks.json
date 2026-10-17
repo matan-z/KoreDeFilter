@@ -1,0 +1,27 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "VBA: Export (Excel → VSCode)",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}\\tools\\vba-sync.ps1", "-Action", "Export"],
+      "problemMatcher": []
+    },
+    {
+      "label": "VBA: Import (VSCode → Excel)",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}\\tools\\vba-sync.ps1", "-Action", "Import"],
+      "problemMatcher": [],
+      "group": { "kind": "build", "isDefault": true }
+    },
+    {
+      "label": "VBA: Import & Save",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}\\tools\\vba-sync.ps1", "-Action", "Import", "-Save"],
+      "problemMatcher": []
+    }
+  ]
+}
