@@ -1,0 +1,12 @@
+{
+  "[vb]": {
+    "files.encoding": "shiftjis"
+  },
+  "files.associations": {
+    "*.cls": "vb",
+    "*.bas": "vb",
+    "*.frm": "vb",
+    "*.frx": "vb",
+    "*.vbs": "vb"
+  }
+}
