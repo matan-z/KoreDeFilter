@@ -26,6 +26,8 @@ Sub KoreDeFilter(ByVal text As String)
         Set ws = ActiveSheet
         Dim c As c_FilteringByArray: Set c = New c_FilteringByArray
         If lst Is Nothing Then
+            isTable = False
+            tableName = ""
             If ws.AutoFilterMode Then
                 Set myRng = ws.AutoFilter.Range
                 Call c.FilteringByRange(myRng, f_FilterTool.TextBox1.Value) '2-1
@@ -33,10 +35,11 @@ Sub KoreDeFilter(ByVal text As String)
                 MsgBox "オートフィルタが設定されていません"
             End If
         Else
-            Dim tableName As String
-            tableName = ws.ListObjects(1).Name
-            If ws.ListObjects(tableName).ShowAutoFilter Then
-                Set myRng = ws.ListObjects(tableName).AutoFilter.Range
+            'アクティブセルがあるテーブルを対象にする
+            isTable = True
+            tableName = lst.Name
+            If lst.ShowAutoFilter Then
+                Set myRng = lst.AutoFilter.Range
                 Call c.FilteringByRange(myRng, f_FilterTool.TextBox1.Value)  '2-1
             Else
                 MsgBox "オートフィルタが設定されていません"

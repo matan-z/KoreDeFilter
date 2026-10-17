@@ -97,23 +97,24 @@ Function Filter(targetWb As Workbook, arr As Variant)
     ' If Col <= AFS Or Col > AFS + AFE Then
     selectedCol = (Col - AFS) + 1
     ' End If
+    'フィルタをかける範囲（テーブルならそのテーブル、それ以外はシートのオートフィルタ）
+    Dim afRng As Range
+    If isTable Then
+        Set afRng = ws.ListObjects(tableName).AutoFilter.Range
+    Else
+        Set afRng = ws.AutoFilter.Range
+    End If
     With ws
         ' On Error Resume Next
-        If isTable = False Then
-            .Cells(.AutoFilter.Range.Row, .AutoFilter.Range.Column).AutoFilter Field:=selectedCol, _
+        afRng.AutoFilter Field:=selectedCol, _
             Criteria1:=Array(arr), _
             Operator:=xlFilterValues
-        Else
-            .ListObjects(tableName).Range.AutoFilter Field:=selectedCol, _
-            Criteria1:=Array(arr), _
-            Operator:=xlFilterValues
-        End If
-        
+
         If WorksheetFunction.Subtotal(3, .Columns(selectedCol)) = 1 Then  'フィルター対象の列にデータがひとつしかなかったら
             MsgBox "該当データがないのでフィルターを戻します"
             ' ActiveSheet.Columuns(selectedCol ).ShowAllData
             '列のみフィルター 【参考】https://matome.naver.jp/odai/2143208158655847001
-            .Cells(ActiveSheet.AutoFilter.Range.Row, ActiveSheet.AutoFilter.Range.Column).AutoFilter Field:=selectedCol
+            afRng.AutoFilter Field:=selectedCol
         Else
             i = 0
             j = 0
