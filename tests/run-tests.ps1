@@ -61,6 +61,27 @@ Public Sub ShowAll()
     On Error Resume Next
     ActiveSheet.ShowAllData
 End Sub
+'結果ファイルの書き出しを確かめる（日本語・記号・Shift-JIS にない文字が UTF-8 で正しく保存されるか）
+Public Function CheckWriteFile() As String
+    On Error GoTo NG
+    Dim s As String
+    s = "ない" & vbCrLf & "1" & vbTab & "〇" & vbTab & "りんご" & vbCrLf & "2" & vbTab & "×" & vbTab & ChrW(&HD842) & ChrW(&HDFB7)
+    Dim c As Object: Set c = New c_FilteringByArray   '遅延バインディング（メソッドが無くてもモジュール全体はコンパイルできる）
+    Dim path As String
+    path = c.WriteResultFile(s)
+    Dim st As Object
+    Set st = CreateObject("ADODB.Stream")
+    st.Type = 2: st.Charset = "utf-8": st.Open
+    st.LoadFromFile path
+    Dim back As String
+    back = st.ReadText
+    st.Close
+    Kill path
+    If back = s Then CheckWriteFile = "OK" Else CheckWriteFile = "NG 内容が違う: " & back
+    Exit Function
+NG:
+    CheckWriteFile = "NG " & Err.Number & ": " & Err.Description
+End Function
 '@
 
 # 実行結果のログを、比較しやすい形（all / none / empty / missing:… / error）にする
@@ -142,7 +163,9 @@ try {
         $code = if ($Original) { $cm.Lines(1, $cm.CountOfLines) } else { Get-CodeBody ([IO.File]::ReadAllText((Join-Path $SrcDir $n))) }
         $code = [regex]::Replace($code, '(?m)^(\s*)MsgBox\b', '$1zz_Test.TestMsgBox')
         $code = [regex]::Replace($code, '(?m)^(\s*)WSH\.Popup\b', '$1zz_Test.TestMsgBox')
-        # メモ帳への出力は、内容をログに残すだけにする
+        # メモ帳への出力は、内容をログに残すだけにする（メモ帳は開かない）
+        $code = [regex]::Replace($code, '(?m)^(\s*)ShowResultInNotepad (\w+)', '$1zz_Test.TestNotepad $2')
+        # 修正前（-Original）のクリップボード＋SendKeys 方式も、同じくログに残すだけにする
         $code = [regex]::Replace($code, '(?m)^(\s*)myDo\.SetText (\w+)', '$1zz_Test.TestNotepad $2')
         $code = [regex]::Replace($code, '(?m)^(\s*)(myDo\.PutInClipboard|ret = Shell\(|AppActivate|CreateObject\("Wscript\.Shell"\)\.SendKeys).*$', '$1'' (test) $2')
         $cm.DeleteLines(1, $cm.CountOfLines); $cm.AddFromString($code)
@@ -181,8 +204,17 @@ try {
             }
         }
     }
+
+    # 問題 7: 結果ファイルの書き出し（-Cases 指定時は、write-file を含むときだけ）
+    if (-not $Cases -or $Cases -contains 'write-file') {
+        $res = $xl.Run("'KoreDeFilter.xlam'!zz_Test.CheckWriteFile")
+        $ok = $res -eq 'OK'
+        if ($ok) { $pass++ } else { $fail++ }
+        Write-Host ("{0} [write-file] 結果ファイルを UTF-8 で書き出し、読み戻して一致するか" -f $(if ($ok) { 'PASS' } else { 'FAIL' })) -ForegroundColor $(if ($ok) { 'Green' } else { 'Red' })
+        if (-not $ok) { Write-Host "       $res" }
+    }
 } finally {
-    foreach ($w in @($xl.Workbooks)) { $w.Close($false) }
+    foreach ($w in @($xl.Workbooks)) { if ($w) { $w.Close($false) } }
     $xl.Quit(); [void][Runtime.InteropServices.Marshal]::ReleaseComObject($xl); [GC]::Collect()
 }
 Write-Host ("`n{0} PASS / {1} FAIL" -f $pass, $fail) -ForegroundColor $(if ($fail) { 'Red' } else { 'Green' })

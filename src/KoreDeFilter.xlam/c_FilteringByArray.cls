@@ -115,6 +115,30 @@ Function DelDupe(arr() As String) As Variant
     DelDupe = delDupeArr
 End Function
 
+'結果をテキストファイルに書き出し、メモ帳で開く
+'（以前はクリップボード＋AppActivate＋SendKeys で貼り付けていたが、メモ帳のタイトルや
+'  起動の速さによって失敗し、クリップボードの中身も消えていたため、ファイル方式にした）
+Sub ShowResultInNotepad(ByVal resultText As String)
+    Dim path As String
+    path = WriteResultFile(resultText)
+    Shell "notepad.exe """ & path & """", vbNormalFocus
+End Sub
+
+'結果を一時フォルダに UTF-8 (BOM 付き) で書き出し、そのパスを返す
+Function WriteResultFile(ByVal resultText As String) As String
+    Dim path As String
+    path = Environ("TEMP") & "\KoreDeFilter_結果_" & Format(Now, "yyyymmdd_hhnnss") & ".txt"
+    Dim st As Object
+    Set st = CreateObject("ADODB.Stream")
+    st.Type = 2          'adTypeText
+    st.Charset = "utf-8"
+    st.Open
+    st.WriteText resultText
+    st.SaveToFile path, 2 'adSaveCreateOverWrite
+    st.Close
+    WriteResultFile = path
+End Function
+
 'フィルタ範囲のうち、表示されているデータ行の数（見出し行は除く）
 Private Function VisibleDataRows(afRng As Range) As Long
     If afRng.Rows.Count <= 1 Then Exit Function
@@ -217,17 +241,8 @@ Function Filter(targetWb As Workbook, arr As Variant)
                 "ある" & vbCrLf & found & vbCrLf & _
                 "=====================" & _
                 all & vbCrLf & both
-                
-                Dim myDo  As New DataObject
-                Set myDo = New DataObject
-                myDo.SetText msgStr
-                myDo.PutInClipboard
-                
-                Dim ret As Long
-                ret = Shell("Notepad.Exe", vbNormalFocus)
-                AppActivate ("無題 - メモ帳")
-                CreateObject("Wscript.Shell").SendKeys "^v"
 
+                ShowResultInNotepad msgStr
             End If
             ' WorksheetFunction.Subtotal(3, Columns(selectedCol ))
         End If
