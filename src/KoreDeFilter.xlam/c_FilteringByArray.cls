@@ -15,6 +15,12 @@ Function FilteringByRange(myRng As Range, text As String)
     AFE = myRng.Columns.Count '列が何列あるか
 
     Col = ActiveCell.Column '現在の選択セルの列
+    '選択中のセルの列がフィルタ範囲の外なら、フィルタしない（Field が範囲外でエラーになるため）
+    If Col < AFS Or Col > AFS + AFE - 1 Then
+        MsgBox "選択中のセルがフィルタ範囲の外にあります。" & vbLf & _
+            "フィルタしたい列のセルを選んでから実行してください。"
+        Exit Function
+    End If
     Dim arr() As String
     text = Trim(text)
     Dim c1 As c_FilteringByArray: Set c1 = New c_FilteringByArray
@@ -132,9 +138,7 @@ Function Filter(targetWb As Workbook, arr As Variant)
     msg = ""
     Dim ws As Worksheet
     Set ws = targetWb.ActiveSheet
-    ' If Col <= AFS Or Col > AFS + AFE Then
-    selectedCol = (Col - AFS) + 1
-    ' End If
+    selectedCol = (Col - AFS) + 1 'フィルタ範囲の中で何列目か（範囲外は FilteringByRange で除外済み）
     'フィルタをかける範囲（テーブルならそのテーブル、それ以外はシートのオートフィルタ）
     Dim afRng As Range
     If isTable Then

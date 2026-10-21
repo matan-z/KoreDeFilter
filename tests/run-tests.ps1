@@ -70,6 +70,7 @@ function Get-Outcome([string]$log) {
     if ($log -match 'ぜんぷありました') { return 'all' }
     if ($log -match '該当データがない') { return 'none' }
     if ($log -match 'テキストボックスに何も入っていません') { return 'empty' }
+    if ($log -match 'フィルタ範囲の外') { return 'outside' }
     return "?($log)"
 }
 
@@ -118,6 +119,15 @@ $all = @(
         @{ In = "`n`nりんご`n`n";       Expect = 'all';   Visible = 'りんご' }
         @{ In = "りんご`n `nみかん";    Expect = 'all';   Visible = 'りんご,みかん' }
         @{ In = "`n `n";                Expect = 'empty'; Visible = 'りんご,,みかん,ぶどう' }) }
+    # 問題 13: 選択中のセルの位置（Select で選ぶセルを指定。省略時は見出しのすぐ下）
+    @{ Name = 'outside-right';    R = 1; C = 1; Table = $false; Data = $fruits; Select = 'D2'; Tests = @(
+        @{ In = "りんご`nみかん"; Expect = 'outside'; Visible = 'りんご,みかん,ぶどう,りんご' }) }
+    @{ Name = 'outside-left';     R = 3; C = 3; Table = $false; Data = $fruits; Select = 'A4'; Tests = @(
+        @{ In = "りんご`nみかん"; Expect = 'outside'; Visible = 'りんご,みかん,ぶどう,りんご' }) }
+    @{ Name = 'below-data';       R = 1; C = 1; Table = $false; Data = $fruits; Select = 'A10'; Tests = @(
+        @{ In = "りんご`nみかん"; Expect = 'all'; Visible = 'りんご,みかん,りんご' }) }
+    @{ Name = 'second-column';    R = 1; C = 1; Table = $false; Data = $fruits; Select = 'B2'; Tests = @(
+        @{ In = "1`n3"; Expect = 'all'; Visible = 'りんご,ぶどう' }) }
 )
 if ($Cases) { $all = $all | Where-Object { $Cases -contains $_.Name } }
 
@@ -152,7 +162,8 @@ try {
         if ($case.Setup) { & $case.Setup $ws }
         $rng = $ws.Range($ws.Cells.Item($r, $c), $ws.Cells.Item($r + $n - 1, $c + 1))
         if ($case.Table) { $null = $ws.ListObjects.Add(1, $rng, $null, 1) } else { $null = $rng.AutoFilter() }
-        $null = $ws.Activate(); $null = $ws.Cells.Item($r + 1, $c).Select()
+        $null = $ws.Activate()
+        if ($case.Select) { $null = $ws.Range($case.Select).Select() } else { $null = $ws.Cells.Item($r + 1, $c).Select() }
 
         foreach ($test in $case.Tests) {
             $xl.Run("'KoreDeFilter.xlam'!zz_Test.SetText", ($test.In -replace "`n", "`r`n"))
